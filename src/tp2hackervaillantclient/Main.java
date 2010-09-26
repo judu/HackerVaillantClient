@@ -25,7 +25,7 @@ public class Main {
    private static final BufferedReader inFromUser =
            new BufferedReader(new InputStreamReader(System.in));
 
-   public static Client client;
+   public static String host;
 
    /**
     * @param args the command line arguments
@@ -37,8 +37,7 @@ public class Main {
          return;
       }
 
-      client = new Client();
-      client.connect(args[0]);
+      host = args[0];
 
       while (true) {
          printMenu();
@@ -56,7 +55,6 @@ public class Main {
                   addPerson();
                   break;
                default:
-                  client.close();
                   return;
             }
 
@@ -99,8 +97,12 @@ public class Main {
               from(RequestBuilder.Elem.N).
               value(pseudo).create();
 
+      Client client = new Client();
+      client.connect(host);
+
       client.send(request);
       client.receiveAndDisplay();
+      client.close();
    }
 
    private static void getCBN() {
@@ -134,8 +136,12 @@ public class Main {
       String personS = builder.create().toJson(person);
 
       String request = new RequestBuilder().type(RequestBuilder.Verb.GET).what(RequestBuilder.Elem.CBN).from(RequestBuilder.Elem.P).value(personS).create();
+      System.out.println(request);
+      Client client = new Client();
+      client.connect(host);
       client.send(request);
       client.receiveAndDisplay();
+      client.close();
    }
 
    private static void GetCBNByPseudo() {
@@ -146,8 +152,12 @@ public class Main {
       }
 
       String request = new RequestBuilder().type(RequestBuilder.Verb.GET).what(RequestBuilder.Elem.CBN).from(RequestBuilder.Elem.N).value(pseudo).create();
+      System.out.println(request);
+      Client client = new Client();
+      client.connect(host);
       client.send(request);
       client.receiveAndDisplay();
+      client.close();
    }
 
    private static Person askPerson() {
@@ -183,7 +193,11 @@ public class Main {
       String cbn = askCBN();
 
       String request = new RequestBuilder().type(RequestBuilder.Verb.POST).cbn(cbn).p(personne).n(pseudo).create();
+      System.out.println(request);
+      Client client = new Client();
+      client.connect(host);
       client.send(request);
+      client.close();
    }
 
    private static Date parseDate(String dateS) throws Exception {

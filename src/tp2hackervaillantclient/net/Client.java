@@ -45,6 +45,7 @@ public class Client {
 
    public void send(String request) {
       try {
+         System.out.println("Request : " + request);
          outToServer.writeBytes(request);
       } catch (IOException ex) {
          Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -54,7 +55,7 @@ public class Client {
    public void receiveAndDisplay() {
       try {
          String response = inFromServer.readLine();
-         System.out.println(response);
+         System.out.println(response + "\n");
       } catch (IOException ex) {
          Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
       }
@@ -63,6 +64,7 @@ public class Client {
    public void close() {
       try {
          inFromServer.close();
+         outToServer.close();
       } catch (IOException ex) {
          Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
       }
